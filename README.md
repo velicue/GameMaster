@@ -19,7 +19,7 @@ And if you are using macports, run following command instead:
 	CLAGS="-I /opt/local/include -L /opt/local/lib" ./quickinstall
 
 ## Configuration
-Website configuration lies in ``common/coffeeconfig.py``. You can specify your own
+Website configuration lies in ``common/gmconfig.py``. You can specify your own
 configuration (such as database host and post other than given) in ``common/config.py``,
 which will be ignored by git.
 
@@ -37,7 +37,8 @@ The website is decoupled into several modules:
   + manage: scripts that helps better manage the development
   + model: mongoengine Document definitions
   + tests: unit test
-  + coffee: application entrance
+  + routes: routes of the website 
+  + gm: application entrance
 
 
 
