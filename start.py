@@ -6,11 +6,12 @@
 
 from gm import get_app
 import api
+import routes
 #import test
 
 app = get_app()
 
-@app.route('/')
+@app.route('/hhh')
 def hello():
     return 'hello'
 
