@@ -5,7 +5,7 @@
 # $Author: Matt Zhang <mattzhang9[at]gmail[dot]com>
 
 from util import *
-from model import *
+from model import User
 
 @api_impl('/user/register', methods=['POST'], preprocessors=dict(email=str,pwd=str))
 def register(email, pwd):

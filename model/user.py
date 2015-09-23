@@ -4,26 +4,29 @@
 # $Date: 2015-09-22 18:29
 # $Author: Matt Zhang <mattzhang9[at]gmail[dot]com>
 
+from util import *
 from gm import get_app
+
+from passlib.hash import bcrypt, md5_crypt, sha512_crypt
 app = get_app()
-Sex = enum{'unknown', 'male', 'female'}
+Sex = enum('unknown', 'male', 'female')
 
-
+cryptor = bcrypt
 
 class User(db.Document):
     email = db.StringField(
         required=True, unique=True,
         max_length=USERNAME_LEN_MAX,
-        min_length=USERNAME_LEN_MIN)
+        min_length=1)
 
     password = db.StringField(required=True)
 
     nickname = db.StringField(
         min_length=NICKNAME_LEN_MIN,
-        max_length=NICKNAME_LEN_MAX, required=True)
+        max_length=NICKNAME_LEN_MAX)
 
     sex = db.IntField(choices=Sex, default=Sex.unknown)
-    phone_number = db.StringField(required=True)
+#    phone_number = db.StringField(required=True)
     _authenticated = False  # flask_login use
 
     meta = {
@@ -39,9 +42,9 @@ class User(db.Document):
 
 
     def as_json(self, verbose = 0):
-        data = dict{email=self.email,
+        data = dict(email=self.email,
                     nickname=self.nickname,
-                    }
+                    )
         return data
 
     @staticmethod
@@ -70,3 +73,15 @@ class User(db.Document):
     # Flask-Login required methods
     def is_authenticated(self):
         return self._authenticated
+
+
+
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.email

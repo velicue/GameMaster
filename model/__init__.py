@@ -5,3 +5,5 @@
 # $Author: He Zhang <mattzhang9[at]gmail[at]com>
 
 
+from gmutil import import_all_modules
+from user import *

@@ -23,7 +23,16 @@ def get_app():
     from gmconfig import app_config
     global get_app, _app
     
-    _app = Flask(__name__)
+    this_file = os.path.realpath(__file__)
+    cur_dir = os.path.dirname(this_file)
+    par_dir = os.path.dirname(cur_dir)
+    instance_path = cur_dir
+    static_folder = os.path.join(par_dir, 'public')
+    template_folder = os.path.join(par_dir, 'public')
+    _app = Flask(__name__,
+              #  static_url_path='',
+                template_folder=template_folder,
+                static_folder=static_folder)
     
     get_app = lambda: _app  # avoid duplicate import
     

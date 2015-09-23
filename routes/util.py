@@ -5,7 +5,6 @@
 # $Author: Matt Zhang <mattzhang9[at]gmail[dot]com>
 
 
-
 from gm import get_app
 
 from model import *

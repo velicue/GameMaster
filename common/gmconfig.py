@@ -86,7 +86,7 @@ class _DefaultConfig(object):
     OPTIONS = {'debug': True}
     
     MONGODB_SETTINGS = {
-        'DB': 'coffee',
+        'DB': 'gm',
         'HOST': 'localhost',
         'PORT': 27017,
 }
