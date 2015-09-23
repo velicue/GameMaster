@@ -1,9 +1,19 @@
 Everything is string not Integer!
 #Users
 
-api/user/register para: {'email': $email, 'pwd': $pwd} return: {'success' = '1'} or {'success' = '0'} 
+api/user/register 
+request: {'email': $email, 'pwd': $pwd} 
+response: {'success' = true} or {'success' = false} 
 
-api/user/login para: {'email': $email, 'pwd': $pwd} return: {'success' = '1'} or {'success' = '0'} 
+---
 
-api/user/repeat para: {'email': $email} return: {'repeat' = '1'} or {'repeat' = '0'} // repeat = 1 means the email is repeated
+api/user/login 
+request: {'email': $email, 'pwd': $pwd} 
+response: {'success' = true} or {'success' = false} 
+
+---
+
+api/user/repeat 
+request: {'email': $email} 
+response: {'repeat' = true} or {'repeat' = false} 
 
