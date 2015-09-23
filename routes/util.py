@@ -15,4 +15,9 @@ import api
 import time
 import pytz
 
+from flask import send_from_directory, send_file
 app = get_app()
+@app.route('/<path:path>')
+def static_proxy(path):
+  # send_static_file will guess the correct MIME type
+    return app.send_static_file(path)
