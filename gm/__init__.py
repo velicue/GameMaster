@@ -17,9 +17,10 @@ def get_app():
     
     import os
     from flask import Flask
+    from flask_login import LoginManager
     import sys
-    from common import *
-    #from coffeeconfig import app_config
+   # from common import *
+    from gmconfig import app_config
     global get_app, _app
     
     _app = Flask(__name__)
@@ -30,15 +31,15 @@ def get_app():
     
     _app.secret_key = "hokey dokey, here's the key"
     
-    #    login_manager = LoginManager()
-    #    login_manager.init_app(_app)
+    login_manager = LoginManager()
+    login_manager.init_app(_app)
     
-    #    @login_manager.user_loader
-    #    def load_user(username):
-    #        from model.user import User
-    #        user = User.get_one(username=username)
-    #        user._authenticated = True
-    #        return user
+    @login_manager.user_loader
+    def load_user(username):
+        from model.user import User
+        user = User.get_one(username=username)
+        user._authenticated = True
+        return user
     
     return _app
 

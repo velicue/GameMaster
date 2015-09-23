@@ -31,7 +31,6 @@ from functools import wraps
 
 app = get_app()
 
-LAST_PAGE = -0426
 
 
 class api_impl(object):
