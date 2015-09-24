@@ -46,7 +46,7 @@ def get_app():
     @login_manager.user_loader
     def load_user(username):
         from model.user import User
-        user = User.get_one(username=username)
+        user = User.get_one(email=username)
         user._authenticated = True
         return user
     

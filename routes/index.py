@@ -5,15 +5,16 @@
 # $Author: Matt Zhang <mattzhang9[at]gmail[dot]com>
 
 from util import *
+from flask.ext.login import login_required
 @app.route('/')
 def example():
     return app.send_static_file('index.html')
     #return render_template('index.html')
 
-#@app.route('/js/<string:j>')
-#def JS(j):
-#    return app.send_static_file('js/'+j)
-    #return render_template('js/' + j)
+@app.route('/ttt')
+@login_required
+def JS():
+    return 'ttt'
 
 #@app.route('/css/<string:c>')
 #def CSS(c):
