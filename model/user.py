@@ -38,6 +38,7 @@ class User(db.Document):
 
     def __init__(self, *args, **kwargs):
         self._authenticated = False
+
         super(User, self).__init__(*args, **kwargs)
 
 
@@ -73,9 +74,6 @@ class User(db.Document):
     # Flask-Login required methods
     def is_authenticated(self):
         return self._authenticated
-
-
-
 
     def is_active(self):
         return True

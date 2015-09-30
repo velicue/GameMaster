@@ -66,7 +66,7 @@ class api_method(object):
             try:
                 rst = self.api_implementation(**kwargs)
             except werkzeug.exceptions.Unauthorized:
-                rst = {u'success': '0', u'msg': u'Auth error'}
+                rst = {u'success': False, u'error': u'Auth error'}
             print 'The return of {} is'.format(request.url)
             print rst
             return jsonify(rst)

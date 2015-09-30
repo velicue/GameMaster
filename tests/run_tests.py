@@ -14,7 +14,6 @@ import unittest
 import argparse
 
 from testcases import *
-from manage.fake_db import main as fake_db
 
 
 def get_args():
@@ -38,9 +37,6 @@ if __name__ == '__main__':
         fake_db()
 
     prog = unittest.main(verbosity=2, argv=[sys.argv[0]], exit=False)
-    if not prog.result.wasSuccessful():
-        print ('[NOTE] please make sure to' +
-               ' ./start-server.py with --unittest option')
-
+    #if not prog.result.wasSuccessful():
 
 # vim: foldmethod=marker

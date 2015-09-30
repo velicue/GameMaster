@@ -41,9 +41,10 @@ The website is decoupled into several modules:
   + gm: application entrance
 
 
-
 # Test
 If you are not familiar with python unittest, please read through [http://docs.python.org/2/library/unittest.html](http://docs.python.org/2/library/unittest.html)
 to understand basic concepts and practices.
 
+To test:
 
+    ./tests/run_tests.py

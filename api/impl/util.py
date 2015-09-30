@@ -475,10 +475,6 @@ def get_user(user_or_username):
     return None
 
 
-def username2user(username):
-    return User.get_one(username=username)
-
-
 def to_dict(s):
     '''
     convert 'comma splitted colon seperated pair of key and value' to a dict

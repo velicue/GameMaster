@@ -6,7 +6,6 @@
 
 import unittest
 from faker import Factory
-from collections import namedtuple
 from functools import wraps
 
 import urllib
@@ -14,6 +13,8 @@ import urllib2
 import cookielib
 import json
 import random
+import requests 
+
 
 from gmconfig import app_config
 
@@ -21,6 +22,7 @@ API_HOST = app_config.HOST
 API_PORT = app_config.PORT
 PROTOCOL = 'http'
 
+req = requests.session()
 
 class APIInterface(object):
     """
@@ -45,20 +47,20 @@ class APIInterface(object):
         url is a location relative to root, e.g '/sample'
         return: json data"""
         url = self._get_url(url, kwargs)
-        response = self.urlopener.open(url)
-        return json.loads(response.read())
+        response = req.get(url)
+        print response.cookies
+        return response.json()
+#        response = self.urlopener.open(url)
+#        return json.loads(response.read())
 
     def post(self, url, **kwargs):
         """a POST request to url with data.(post)
         url is a location relative to root, e.g '/add_tab'
         return: json data
         """
-#         req = urllib2.Request(
-#             self._url(url), urllib.urlencode(kwargs),
-#             )
-        response = self.urlopener.open(
-            self._url(url), urllib.urlencode(kwargs))
-        return json.loads(response.read())
+        headers = {'content-type': 'application/json'}
+        response = req.post(self._url(url), data=json.dumps(kwargs), headers=headers)
+        return response.json()
 
     def _url(self, url):
         return self.url_base + url
@@ -67,28 +69,6 @@ class APIInterface(object):
         if len(data):
             url = url + '?' + urllib.urlencode(data)
         return self._url(url)
-
-
-faker = Factory.create()
-
-User = namedtuple(
-    'User',
-    ('username password password_confirm' +
-        ' nickname sex email phone_number categories tags').split())
-
-
-def fake_user():
-    password = 'aaASDFs12sdf'
-    return User(
-        username=faker.user_name(),
-        password=password,
-        password_confirm=password,
-        nickname=faker.name(),
-        sex=random.choice('unknown male female'.split()),
-        email=faker.email(),
-        phone_number=faker.phone_number(),
-        categories=["123123"],
-        tags="asdf,asdfe,asdewf")
 
 
 def deep_print(obj, indent=4, depth=0):
@@ -120,60 +100,21 @@ class APITestCaseBase(unittest.TestCase, APIInterface):
             raise e
 
     def assertSucceed(self, res):
-        self.assertIn('success', res)
+        self.assertTrue(res['success'])
 
-    def assertError(self, res, error_msg=None):
-        if not (error_msg is None):
-            self.assertDictContainsSubset(res, dict(error=error_msg))
-        else:
-            self.assertIn('error', res)
+    def assertError(self, res):
+        self.assertFalse(res['success'])
 
     def login(self, user):
         return self.post(
-            '/login',
-            user_id=user.username, password=user.password)
+            '/user/login',
+            email=user.email, pwd=user.password)
 
     def logout(self):
-        return self.get('/logout')
+        return self.get('/user/logout')
 
     def register(self, user):
-        return self.post('/register', **user.__dict__)
+        return self.post('/user/register', 
+            email=user.email, pwd=user.password)
 
 
-class APITestCaseWithRegisteredUser(APITestCaseBase):
-    def setUp(self):
-        self.user = fake_user()
-        self.register(self.user)
-        self.login(self.user)
-
-    def tearDown(self):
-        # TODO: should delete the user.
-        # wait until user permission model is finished
-        self.logout()
-
-
-class APITestCaseWithPermissions(APITestCaseBase):
-    def fakeUserWithPermissions(self, permissions):
-        from model.user import User
-        self.password = 'aaASDFs12sdf'
-        user = User(
-            username=faker.user_name()[0:4] + '_test',
-            password=User.encrypted_password(self.password),
-            nickname=faker.name(),
-            phone_number=faker.phone_number())
-        user.permissions = permissions
-        return user
-
-    def setUp(self):
-        if 'permissions' in dir(self):
-            self.user = self.fakeUserWithPermissions(self.permissions)
-            self.user.save()
-            self.user.password = self.password
-            self.login(self.user)
-
-    def tearDown(self):
-        if 'permissions' in dir(self):
-            self.logout()
-            self.user.delete()
-
-# vim: foldmethod=marker

@@ -11,7 +11,7 @@ from model import User
 def register(email, pwd):
     exists = User.objects(email=email)
     if len(exists):
-        return {'success':False}
+        return {'success':False, 'error':'exists user'}
     user = User(email=email)
     user.password = User.encrypted_password(pwd)
     user.save()
@@ -21,16 +21,22 @@ def register(email, pwd):
 @api_impl('/user/login', methods=['POST'], preprocessors=dict(email=str,pwd=str))
 def login(email, pwd):
     if email is None or pwd is None:
-        return {'success': False}
+        return {'success': False, 'error':'email or pwd is none'}
     user = User.get_one(email=email)
     if not user:
-        return {'success': False}
+        return {'success': False, 'error':'no user'}
     if User.login_user(user, pwd): # Wrong PWD
         login_user(user)
         return {'success': True}
     else:
-        return {'success': False}
+        return {'success': False, 'error':'wrong pwd'}
 
+
+@api_impl('/user/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    return {'success':True}
 
 
 @api_impl('/user/repeat', methods=['POST'], preprocessors=dict(email=str))
